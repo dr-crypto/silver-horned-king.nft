@@ -29,12 +29,15 @@ def main():
     pwd = os.path.dirname(os.path.abspath(__file__))
     print(f'set pwd: {pwd}')
     svg_base = read_file_text(pwd + '/silver-horn-king.svg')
-    for s in os.listdir(pwd):
+    bg_text = b64(read_file_data(pwd + '/bg.png'))
+    for s in os.listdir(pwd + '/overlay'):
         if s.endswith('.png'):
             svg_gen = pwd + '/build/shk-' + s[:-4] + '.svg'
-            png_data = read_file_data(pwd+'/'+s)
+            png_data = read_file_data(pwd+'/overlay/'+s)
             png_text = b64(png_data)
-            gen = svg_base.replace('{COIN}', png_text)
+            gen = svg_base
+            gen = gen.replace('{BG}', bg_text)
+            gen = gen.replace('{COIN}', png_text)
             write_file_text(svg_gen, gen)
             print(f'generated: {svg_gen}')
 
